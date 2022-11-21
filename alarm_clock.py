@@ -2,15 +2,13 @@ import time
 import datetime
 from dateutil import tz
 from dateutil.parser import parse
-from tzlocal import get_localzone
 
 alarm_input = input("What is the time that you want the alarm to go off in the following format: HH:MM:SS (AM/PM for 12 Hour Time)? ")
-if "AM" in alarm_input or "am" in alarm_input or "PM" in alarm_input or "pm" in alarm_input:
-    alarm_hour = int(alarm_input.split(":")[0])
-    if alarm_hour > 12:
-        print("Please remove AM/PM or change time to 12 hour clock.")
-        exit()
-parsed_alarm = parse(alarm_input)
+try:
+    parsed_alarm = parse(alarm_input)
+except Exception:
+    print("Please remove AM/PM or change time to 12 hour clock.")
+    exit()
 alarm_utc = datetime.datetime.astimezone(parsed_alarm, tz=tz.UTC)
 current_time = datetime.datetime.now(tz=tz.UTC)
 if alarm_utc < current_time:
